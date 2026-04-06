@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% set active_page = 'services' %}
+{% block title %}Service Comparison Board{% endblock %}
+
+{% block content %}
+<header>
+    <h1>Hypercloud Comparison Board</h1>
+    <p>Choose the elite plan that fits your cloud compute needs.</p>
+</header>
+
+<div class="table-area" style="margin-top: 2rem; padding: 2rem;">
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th style="width: 30%; font-size: 1.2rem; color: var(--secondary);">Feature Selection</th>
+                <th style="text-align: center;">
+                    <div style="font-size: 1.2rem;">Basic</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 400;">Starter usage</div>
+                </th>
+                <th style="text-align: center; background: rgba(112, 0, 255, 0.1); border-radius: 10px 10px 0 0;">
+                    <div style="font-size: 1.2rem; color: var(--secondary);">Developer</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 400;">Full creative control</div>
+                </th>
+                <th style="text-align: center;">
+                    <div style="font-size: 1.2rem;">Enterprise</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 400;">Unlimited power</div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="feat-label">Monthly Base Fee</td>
+                <td class="feat-val">₹ 200</td>
+                <td class="feat-val highlighted">₹ 1,000</td>
+                <td class="feat-val">₹ 5,000</td>
+            </tr>
+            <tr>
+                <td class="feat-label">GPU Access Tier</td>
+                <td class="feat-val">RTX 3050 Only</td>
+                <td class="feat-val highlighted">Up to RTX 4090</td>
+                <td class="feat-val">A100 & RTX 5090</td>
+            </tr>
+            <tr>
+                <td class="feat-label">Max Storage Capacity</td>
+                <td class="feat-val">50 GB</td>
+                <td class="feat-val highlighted">500 GB</td>
+                <td class="feat-val">Unlimited (On-demand)</td>
+            </tr>
+            <tr>
+                <td class="feat-label">API Access & Dev Tools</td>
+                <td class="feat-val">❌</td>
+                <td class="feat-val highlighted">✔</td>
+                <td class="feat-val">✔ (Dedicated API)</td>
+            </tr>
+            <tr>
+                <td class="feat-label">Network Priority</td>
+                <td class="feat-val">Standard</td>
+                <td class="feat-val highlighted">High</td>
+                <td class="feat-val">Ultra-Low Latency</td>
+            </tr>
+            <tr>
+                <td class="feat-label">Support SLA</td>
+                <td class="feat-val">Email (48h)</td>
+                <td class="feat-val highlighted">Chat (2h)</td>
+                <td class="feat-val">24/7 Phone & Technical</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="text-align: center;"><button class="btn-select">Select</button></td>
+                <td style="text-align: center; background: rgba(112, 0, 255, 0.1); padding-bottom: 20px;"><button class="btn-select active">Selected</button></td>
+                <td style="text-align: center;"><button class="btn-select">Select</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div style="margin-top: 4rem;">
+    <h2 style="margin-bottom: 1.5rem; color: var(--secondary);">Elite On-Demand Hardware Catalog</h2>
+    <div class="table-area">
+        <table>
+            <thead>
+                <tr>
+                    <th>Cloud Resource</th>
+                    <th>VRAM / Spec</th>
+                    <th>Rate (INR)</th>
+                    <th>Unit</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resource in resources %}
+                <tr>
+                    <td style="font-weight: 600;">{{ resource.resource_name }}</td>
+                    <td style="color: var(--text-muted);">
+                        {% if '3050' in resource.resource_name %}4GB VRAM
+                        {% elif '4060' in resource.resource_name %}8GB VRAM
+                        {% elif '4090' in resource.resource_name %}24GB VRAM
+                        {% elif '5090' in resource.resource_name %}16GB VRAM (Elite)
+                        {% elif 'A100' in resource.resource_name %}80GB VRAM (AI)
+                        {% elif 'Storage' in resource.resource_name %}1TB NVMe
+                        {% else %}-{% endif %}
+                    </td>
+                    <td style="color: var(--secondary); font-weight: 700;">₹ {{ resource.unit_price_inr }}</td>
+                    <td style="color: var(--text-muted);">per {% if 'Storage' in resource.resource_name %}session{% else %}hour{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .comparison-table { width: 100%; border-collapse: collapse; }
+    .comparison-table td, .comparison-table th { padding: 1.5rem; border-bottom: 1px solid var(--border); }
+    .feat-label { font-weight: 600; color: var(--text-main); }
+    .feat-val { text-align: center; color: var(--text-muted); font-size: 0.95rem; }
+    .feat-val.highlighted { background: rgba(112, 0, 255, 0.1); color: var(--text-main); font-weight: 600; }
+    .btn-select { padding: 0.6rem 1.5rem; border-radius: 20px; border: 1px solid var(--primary); background: transparent; color: white; cursor: pointer; transition: all 0.3s; }
+    .btn-select.active { background: var(--primary); border: none; box-shadow: 0 0 15px rgba(112, 0, 255, 0.4); }
+    .btn-select:hover { transform: scale(1.05); }
+</style>
+{% endblock %}

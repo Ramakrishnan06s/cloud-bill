@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% set active_page = 'invoices' %}
+{% block title %}Invoices{% endblock %}
+
+{% block content %}
+<header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem;">
+    <div>
+        <h1>Invoices</h1>
+        <p>Monthly billing summaries and automated calculation engine.</p>
+    </div>
+    <form action="/billing/calculate" method="POST">
+        <button type="submit" style="padding: 0.75rem 1.5rem; border-radius: 0.75rem; background: var(--secondary); color: var(--bg-dark); border: none; cursor: pointer; font-weight: 700; box-shadow: 0 0 15px rgba(0, 247, 255, 0.3);">Calculate Bills</button>
+    </form>
+</header>
+
+<section class="table-area">
+    <table>
+        <thead>
+            <tr>
+                <th>Invoice ID</th>
+                <th>Customer</th>
+                <th>Billing Month</th>
+                <th>Total (INR)</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for invoice in invoices %}
+            <tr>
+                <td>#{{ invoice.invoice_id }}</td>
+                <td>{{ invoice.customer.name }}</td>
+                <td>{{ invoice.billing_month }}</td>
+                <td>₹ {{ invoice.total_amount_inr }}</td>
+                <td>
+                    <span class="{% if invoice.payment_status == 'Paid' %}status-paid{% else %}status-unpaid{% endif %}">
+                        {{ invoice.payment_status }}
+                    </span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}

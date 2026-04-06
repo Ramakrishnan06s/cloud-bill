@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% set active_page = 'customers' %}
+{% block title %}Customers{% endblock %}
+
+{% block content %}
+<header>
+    <h1>Customers</h1>
+    <p>View and manage your registered cloud customers.</p>
+</header>
+
+<section class="card" style="margin-bottom: 2rem;">
+    <h3>Register New Customer</h3>
+    <form action="/customers/add" method="POST" style="display: flex; gap: 1rem; align-items: flex-end; margin-top: 1rem;">
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label style="font-size: 0.8rem; color: var(--text-muted);">Name</label>
+            <input type="text" name="name" placeholder="e.g. Manoj" style="padding: 0.5rem; border-radius: 0.5rem; background: var(--bg-dark); color: white; border: 1px solid var(--border);" required>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label style="font-size: 0.8rem; color: var(--text-muted);">Initial Plan</label>
+            <select name="plan_id" style="padding: 0.5rem; border-radius: 0.5rem; background: var(--bg-dark); color: white; border: 1px solid var(--border);">
+                {% for plan in plans %}
+                <option value="{{ plan.plan_id }}">{{ plan.plan_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" style="padding: 0.6rem 1.2rem; border-radius: 0.5rem; background: var(--primary); color: white; border: none; cursor: pointer; font-weight: 600;">Register Customer</button>
+    </form>
+</section>
+
+<section class="table-area">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Plan</th>
+                <th>Base Fee</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for customer in customers %}
+            <tr>
+                <td>{{ customer.cust_id }}</td>
+                <td>{{ customer.name }}</td>
+                <form action="/customers/update-plan" method="POST">
+                    <input type="hidden" name="cust_id" value="{{ customer.cust_id }}">
+                    <td>
+                        <select name="plan_id" style="padding: 0.3rem; border-radius: 0.4rem; background: var(--bg-dark); color: white; border: 1px solid var(--border);">
+                            {% for plan in plans %}
+                            <option value="{{ plan.plan_id }}" {% if customer.plan_id == plan.plan_id %}selected{% endif %}>{{ plan.plan_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>₹ {{ customer.plan.monthly_base_fee if customer.plan else '0.00' }}</td>
+                    <td style="display: flex; gap: 1rem;">
+                        <button type="submit" style="color: var(--secondary); background: none; border: none; cursor: pointer; font-weight: 600;">Save</button>
+                </form>
+                        <form action="/customers/remove/{{ customer.cust_id }}" method="POST" onsubmit="return confirm('Note: All associated logs and invoices will be deleted. Proceed?')">
+                            <button type="submit" style="color: #ff4d4d; background: none; border: none; cursor: pointer; font-weight: 600;">Remove</button>
+                        </form>
+                    </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}

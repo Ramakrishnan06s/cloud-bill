@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 40px auto; padding: 20px; }
+    h1 { color: #7000ff; border-bottom: 2px solid #00f7ff; padding-bottom: 10px; }
+    h2 { color: #7000ff; margin-top: 30px; }
+    .step { background: #070312; color: #f8fafc; border-left: 4px solid #00f7ff; padding: 15px; margin: 20px 0; border-radius: 4px; }
+    .code { font-family: 'Courier New', Courier, monospace; background: #1a1a2e; color: #00f7ff; padding: 2px 5px; border-radius: 3px; }
+    .tag { display: inline-block; background: #7000ff; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.8em; margin-right: 10px; }
+</style>
+</head>
+<body>
+    <h1>Hypercloud Project Documentation</h1>
+    <p>This document tracks the rebranding and CRUD implementation for the <strong>Hypercloud</strong> project.</p>
+
+    <div class="step">
+        <span class="tag">Phase 1</span>
+        <h2>Brand Injection</h2>
+        <p><strong>Action:</strong> Rebranded the application to <strong>Hypercloud</strong>.</p>
+        <p><strong>Theme:</strong> Visual identity updated to <strong>Neon Cyan (#00f7ff)</strong> and <strong>Deep Purple (#7000ff)</strong> to create a high-tech cloud aesthetic.</p>
+    </div>
+
+    <div class="step">
+        <span class="tag">Phase 2</span>
+        <h2>Population (Tamil User Base)</h2>
+        <p><strong>Action:</strong> Seeded the database with new users: <strong>Suthan, Akash, Kavin, Rahul, and Sanjay</strong>.</p>
+        <p><strong>Linking:</strong> Each user is linked to specific cloud resources (e.g., Suthan using an RTX 3050).</p>
+    </div>
+
+    <div class="step">
+        <span class="tag">Phase 3</span>
+        <h2>CRUD Implementation</h2>
+        <p><strong>Features:</strong></p>
+        <ul>
+            <li><strong>CREATE:</strong> Added a "Launch Instance" form to start new resource sessions.</li>
+            <li><strong>READ:</strong> Implemented advanced SQL JOINs to display unified data on the Hypercloud Dashboard.</li>
+            <li><strong>UPDATE:</strong> Added "Modify Plan" functionality to live-update customer subscription tiers.</li>
+            <li><strong>DELETE:</strong> Implemented "Terminate Instance" to safely remove active sessions from the database.</li>
+        </ul>
+    </div>
+
+    <div class="step">
+        <span class="tag">Technical</span>
+        <h2>System Verification</h2>
+        <p><strong>Verification:</strong> All CRUD routes (<code>launch</code>, <code>update-plan</code>, <code>terminate</code>) have been tested and confirmed functional using the internal browser verification tool.</p>
+    </div>
+
+    <div class="step">
+        <span class="tag">Guide</span>
+        <h2>How to Run Hypercloud</h2>
+        <p>To run this project in your terminal:</p>
+        <ul>
+            <li><strong>Reset Database:</strong> <span class="code">python3 init_db.py</span></li>
+            <li><strong>Start Server:</strong> <span class="code">python3 app.py</span></li>
+        </ul>
+    </div>
+</body>
+</html>

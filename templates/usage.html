@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% set active_page = 'usage' %}
+{% block title %}Usage Logs{% endblock %}
+
+{% block content %}
+<header>
+    <h1>Usage History</h1>
+    <p>Detailed log of resource consumption across all customers.</p>
+</header>
+
+<section class="card" style="margin-bottom: 2rem;">
+    <h3>Launch New Instance</h3>
+    <form action="/usage/launch" method="POST" style="display: flex; gap: 1rem; align-items: flex-end; margin-top: 1rem;">
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label style="font-size: 0.8rem; color: var(--text-muted);">Customer</label>
+            <select name="cust_id" style="padding: 0.5rem; border-radius: 0.5rem; background: var(--bg-dark); color: white; border: 1px solid var(--border);">
+                {% for customer in customers %}
+                <option value="{{ customer.cust_id }}">{{ customer.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label style="font-size: 0.8rem; color: var(--text-muted);">Resource</label>
+            <select name="resource_id" style="padding: 0.5rem; border-radius: 0.5rem; background: var(--bg-dark); color: white; border: 1px solid var(--border);">
+                {% for resource in resources %}
+                <option value="{{ resource.resource_id }}">{{ resource.resource_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label style="font-size: 0.8rem; color: var(--text-muted);">Units (Hrs/GB)</label>
+            <input type="number" step="0.1" name="units" placeholder="e.g. 5.0" style="padding: 0.5rem; border-radius: 0.5rem; background: var(--bg-dark); color: white; border: 1px solid var(--border);" required>
+        </div>
+        <button type="submit" style="padding: 0.6rem 1.2rem; border-radius: 0.5rem; background: var(--primary); color: white; border: none; cursor: pointer; font-weight: 600;">Launch Instance</button>
+    </form>
+</section>
+
+<section class="table-area">
+    <table>
+        <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Resource</th>
+                <th>Units Used</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in usage_logs %}
+            <tr>
+                <td>{{ log.customer.name }}</td>
+                <td>{{ log.resource.resource_name }}</td>
+                <td>{{ log.units_used }}</td>
+                <td>{{ log.usage_date }}</td>
+                <td>
+                    <form action="/usage/terminate/{{ log.log_id }}" method="POST">
+                        <button type="submit" style="color: #ff4d4d; background: none; border: none; cursor: pointer; font-weight: 600;">Terminate</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}
