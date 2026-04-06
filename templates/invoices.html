@@ -8,9 +8,14 @@
         <h1>Invoices</h1>
         <p>Monthly billing summaries and automated calculation engine.</p>
     </div>
-    <form action="/billing/calculate" method="POST">
-        <button type="submit" style="padding: 0.75rem 1.5rem; border-radius: 0.75rem; background: var(--secondary); color: var(--bg-dark); border: none; cursor: pointer; font-weight: 700; box-shadow: 0 0 15px rgba(0, 247, 255, 0.3);">Calculate Bills</button>
-    </form>
+    <div class="header-actions" style="display: flex; gap: 1rem; align-items: center;">
+        <a href="/invoices/export" style="padding: 0.75rem 1.5rem; border-radius: 0.75rem; background: rgba(255, 255, 255, 0.05); color: var(--text-main); border: 1px solid var(--border); text-decoration: none; cursor: pointer; font-weight: 500; transition: all 0.3s ease;">
+            📥 Export CSV
+        </a>
+        <form action="/billing/sync" method="POST" onsubmit="return confirm('Archive usage logs and move totals to Invoices? This will reset usage counts for the next month.');">
+            <button type="submit" style="padding: 0.75rem 1.5rem; border-radius: 0.75rem; background: var(--warning); color: var(--bg-dark); border: none; cursor: pointer; font-weight: 700; box-shadow: 0 0 15px rgba(255, 183, 0, 0.3);">Monthly Sync (Archive Logs)</button>
+        </form>
+    </div>
 </header>
 
 <section class="table-area">
@@ -19,9 +24,12 @@
             <tr>
                 <th>Invoice ID</th>
                 <th>Customer</th>
+                <th>Subscription</th>
+                <th>GPU Hours</th>
                 <th>Billing Month</th>
                 <th>Total (INR)</th>
                 <th>Status</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -29,6 +37,8 @@
             <tr>
                 <td>#{{ invoice.invoice_id }}</td>
                 <td>{{ invoice.customer.name }}</td>
+                <td>{{ invoice.customer.plan.plan_name if invoice.customer.plan else 'No Plan' }}</td>
+                <td>{{ invoice.gpu_hours | round(2) }} hrs</td>
                 <td>{{ invoice.billing_month }}</td>
                 <td>₹ {{ invoice.total_amount_inr }}</td>
                 <td>
@@ -36,9 +46,41 @@
                         {{ invoice.payment_status }}
                     </span>
                 </td>
+                <td>
+                    {% if invoice.payment_status != 'Paid' %}
+                    <form action="/invoices/pay/{{ invoice.invoice_id }}" method="POST">
+                        <button type="submit" class="pay-btn">Mark Paid</button>
+                    </form>
+                    {% else %}
+                    <span style="color: var(--success); font-weight: bold; font-size: 0.8rem;">CLEARED</span>
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </section>
+
+<style>
+.header-actions a:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: var(--secondary) !important;
+}
+
+.pay-btn {
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.5rem;
+    background: linear-gradient(135deg, #0cebeb, #20e3b2, #29ffc6);
+    color: #1a1a2e;
+    border: none;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+.pay-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(41, 255, 198, 0.4);
+}
+</style>
 {% endblock %}
